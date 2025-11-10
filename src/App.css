@@ -1,0 +1,366 @@
+/* Layout container for the whole app */
+.container {
+	box-sizing: border-box;
+	width: 100%;        /* fills available width */
+	max-width: 100vw;   /* never exceed the viewport width */
+	margin: 0 auto;     /* center if narrower than viewport */
+	min-height: 100vh;  /* optional: ensure it at least covers viewport height */
+	padding: 0;         /* no default padding */
+}
+
+/* Two-column layout: sidebar + content */
+.container {
+	display: flex;
+	flex-direction: row;
+  margin: 0
+}
+
+.sidebar {
+	box-sizing: border-box;
+ 	flex: 0 0 20%;      /* fixed 20% of the container */
+ 	width: 20%;
+  	min-width: 0;       /* allow shrinking on small screens */
+ 	background-color: #032B91; /* sidebar background */
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: space-between;
+}
+
+.content-container {
+ 	box-sizing: border-box;
+ 	flex: 1 1 auto;     /* take remaining space */
+  	min-width: 0;       /* prevent overflow from long content */
+ 	background-color: #001753; /* content background */
+}
+
+/* Navigation styles inside sidebar */
+.sidebar-nav ul {
+	list-style: none;
+	margin: 0;
+	padding: 0; /* anchors will span full sidebar width */
+}
+.sidebar-nav li + li {
+	margin-top: 0.25rem;
+}
+.sidebar a {
+	color: #ffffff;
+	text-decoration: none;
+	display: flex;
+	width: 100%;            /* fill sidebar width */
+	height: 8vh;           /* 8% of viewport height */
+	box-sizing: border-box;
+	align-items: center;
+	justify-content: center;
+	padding: 0;             /* remove internal padding so size is exact */
+	border-radius: 0.25rem;
+}
+.sidebar a:hover {
+	background: rgba(255,255,255,0.06);
+}
+
+/* Active link: white background, text colored to match sidebar background */
+.sidebar a.active,
+.sidebar a[aria-current="page"] {
+	background-color: #ffffff;
+	color: #032B91;
+}
+
+/* Content readability */
+.content-container {
+	color: #fff;
+	padding: 1rem;
+	overflow: auto;
+}
+
+/* Home page search and grid */
+.home-page .search-bar {
+	display: flex;
+	gap: 0.5rem;
+	align-items: center;
+	margin: 1rem 0 1.5rem 0;
+}
+.home-page .search-input {
+	flex: 1 1 auto;
+	padding: 0.8rem 1rem;
+	border-radius: 24px;
+	border: none;
+	font-size: 1rem;
+}
+.home-page .search-button {
+	background: #fff;
+	color: #001753;
+	border: none;
+	width: 44px;
+	height: 44px;
+	border-radius: 999px;
+	cursor: pointer;
+}
+.page-title {
+	font-size: 2rem;
+	margin: 0 0 1rem 0;
+}
+
+/* Info page card */
+.info-page {
+	padding: 1rem 0 2rem 0;
+}
+.info-card {
+	background: #ffffff;
+	color: #001853;
+	border-radius: 16px;
+	padding: 2rem;
+	display: flex;
+	gap: 2rem;
+	align-items: center;
+	box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+	margin-bottom: 2rem;
+}
+.info-left {
+	flex: 0 0 220px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.info-avatar {
+	width: 160px;
+	height: 160px;
+	border-radius: 50%;
+	background: #666;
+	color: #fff;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.1rem;
+}
+
+.info-avatar-img {
+	width: 160px;
+	height: 160px;
+	border-radius: 50%;
+	object-fit: cover;
+	border: 6px solid rgba(255,255,255,0.9);
+	display: block;
+}
+.info-right {
+	flex: 1 1 auto;
+}
+.info-name {
+	margin: 0 0 0.25rem 0;
+	font-size: 1.6rem;
+}
+.info-faculty {
+	color: #2b6cb0;
+	margin-bottom: 1rem;
+}
+.info-rows .row {
+	display: flex;
+	gap: 1.25rem;
+	margin-top: 0.6rem;
+}
+.info-rows .label {
+	width: 80px;
+	font-weight: 600;
+	opacity: 0.85;
+}
+.info-rows .value {
+	flex: 1 1 auto;
+}
+
+@media (max-width: 880px) {
+	.info-card { flex-direction: column; align-items: flex-start; }
+	.info-left { width: 100%; display:flex; justify-content:center }
+}
+.home-page {
+	--card-w: 32vw; /* card width = 32% of viewport width */
+	--card-h: 28vh; /* card height = 28% of viewport height */
+}
+
+.course-grid {
+	display: grid;
+	/* allow dynamic number of columns depending on viewport and number of cards */
+	grid-template-columns: repeat(auto-fill, minmax(var(--card-w), 1fr));
+	grid-auto-rows: var(--card-h);
+	gap: 1.25rem;
+	justify-content: start;
+}
+
+.course-card {
+	background: #003EDB; /* card background requested */
+	border-radius: 12px;
+	padding: 1rem;
+	border: 2px solid rgba(255,255,255,0.14);
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	width: var(--card-w);
+	height: var(--card-h);
+	box-sizing: border-box;
+	overflow: hidden;
+	transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+/* registered button style (after user registers from Home) */
+.btn-registered {
+	background: #ffffff;
+	color: #003EDB;
+	border: none;
+	padding: 0.6rem 1.2rem;
+	border-radius: 24px;
+	font-weight: 600;
+	cursor: default;
+	box-shadow: none;
+}
+
+/* My Courses page styles */
+.my-courses-page .empty-placeholder {
+	color: rgba(255,255,255,0.35);
+	font-size: 2rem;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	height: 60vh;
+}
+
+.my-courses-list {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 1.5rem;
+	padding-top: 1rem;
+}
+
+.my-course-card {
+	background: #ffffff;
+	border-radius: 16px;
+	padding: 2rem;
+	width: min(680px, 70%);
+	color: #001753;
+	box-shadow: 0 2px 0 rgba(0,0,0,0.06);
+}
+.my-course-card .course-code.big { font-size: 28px; color: #001753; margin-top: 0.5rem; }
+.my-course-card .course-title.big { font-size: 36px; margin: .5rem 0 1rem; color: #001753; }
+.my-course-card .tutor { margin-top: 0.5rem; color: #001753; }
+.my-course-card hr { border: none; border-top: 2px solid rgba(0,0,0,0.08); margin: 1rem 0; }
+.my-course-actions { display:flex; justify-content:flex-end; margin-top: 1.5rem; }
+.btn-details { background: #001753; color: #fff; padding: 1rem 2rem; border-radius: 12px; border:none; cursor:pointer; font-size: 1.05rem; }
+
+.course-card:hover {
+	transform: scale(1.03);
+	box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+}
+.course-title {
+	margin: 0.5rem 0 0 0;
+	font-size: 1.25rem;
+}
+.course-code {
+	font-size: 0.85rem;
+	opacity: 0.8;
+}
+.tutor {
+	margin-top: 0.6rem;
+	font-size: 0.95rem;
+}
+.meta {
+	font-size: 0.85rem;
+	opacity: 0.85;
+}
+.card-actions {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: 1rem;
+}
+.btn-register {
+	background: rgba(0,0,0,0.3);
+	color: #fff;
+	border: none;
+	padding: 0.6rem 1rem;
+	border-radius: 999px;
+	cursor: pointer;
+}
+
+@media (max-width: 880px) {
+	.home-page { --card-w: 90vw; --card-h: 40vh; }
+	.course-grid { grid-template-columns: 1fr; }
+}
+
+/* Sidebar header (logo, avatar, name) */
+.sidebar-header {
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center;
+	padding: 1.25rem 1rem 2rem 1rem;
+	text-align: center;
+	color: #fff;
+}
+.sidebar-logo {
+	height: 48px;
+	display: block;
+	margin: 0.25rem auto 0.5rem auto;
+}
+.app-title {
+	font-size: 1.6rem;
+	margin: 0.25rem 0 0.75rem 0;
+	font-weight: 500;
+}
+.avatar {
+	width: 110px;
+	height: 110px;
+	margin: 0.5rem auto;
+	border-radius: 50%;
+	background: #555;
+	color: #eee;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 6px solid rgba(255,255,255,0.9);
+	font-size: 1.2rem;
+}
+.user-name {
+	margin-top: 0.75rem;
+	font-size: 1.1rem;
+	font-weight: 700;
+	text-align: center;
+}
+.user-id {
+	margin-top: 0.25rem;
+	font-size: 1rem;
+	opacity: 0.9;
+}
+
+/* Footer time/week */
+.sidebar-footer {
+	text-align: center;
+	padding: 1rem;
+	color: #fff;
+}
+.week-pill {
+	display: inline-block;
+	background: #fff;
+	color: #032B91;
+	padding: 0.5rem 0.9rem;
+	border-radius: 10px;
+	font-weight: 600;
+	margin-bottom: 0.6rem;
+}
+.date-line {
+	font-size: 1rem;
+	margin-top: 0.5rem;
+}
+.time-line {
+	font-size: 1.1rem;
+	margin-top: 0.25rem;
+}
+
+/* On very small viewports, stack vertically */
+@media (max-width: 480px) {
+ 	.container {
+ 		flex-direction: column;
+ 	}
+ 	.sidebar {
+ 		width: 100%;
+ 		flex: 0 0 auto;
+ 	}
+ 	.content-container {
+ 		width: 100%;
+ 	}
+}

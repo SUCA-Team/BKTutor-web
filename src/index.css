@@ -1,0 +1,15 @@
+/* Global reset to remove browser default gaps and set base background */
+html, body, #root {
+	height: 100%;
+}
+
+html, body {
+	margin: 0;
+	padding: 0;
+	background-color: #001753; /* match content background to avoid visible white gap */
+	color: #ffffff;
+}
+
+#root {
+	min-height: 100vh;
+}
