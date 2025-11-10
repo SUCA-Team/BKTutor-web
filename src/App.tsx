@@ -34,12 +34,14 @@ function App() {
   return (
     <div className="container">
       <aside className="sidebar">
-        <div className="sidebar-header" style={{ backgroundImage: `url(${BG})` }}>
-          <img src={Logo} alt="Logo" className="sidebar-logo" />
-          <h2 className="app-title">BK Tutor</h2>
-          <div className="avatar">Avatar</div>
-          <div className="user-name">NGUYỄN NHẬT QUANG</div>
-          <div className="user-id">2352973</div>
+        <div className="sidebar-header">
+          <div className="sidebar-bg" style={{ backgroundImage: `url(${BG})` }} />
+          <div className="sidebar-header-content">
+            <img src={Logo} alt="Logo" className="sidebar-logo" />
+            <div className="avatar">Avatar</div>
+            <div className="user-name">NGUYỄN NHẬT QUANG</div>
+            <div className="user-id">2352973</div>
+          </div>
         </div>
 
         <nav className="sidebar-nav">
