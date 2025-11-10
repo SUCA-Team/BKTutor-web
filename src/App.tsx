@@ -1,17 +1,34 @@
 import './App.css'
 import { NavLink, Routes, Route } from 'react-router-dom'
 import ROUTES from './pages/routes'
+import Login from './components/Login'
 import Logo from './assets/Logo.png'
 import BG from './assets/Background-pattern.png'
 import { useEffect, useState } from 'react'
+import { useAuth } from './contexts/AuthContext'
 
 function App() {
   const [now, setNow] = useState(() => new Date())
+  const { isAuthenticated, user, logout, isLoading } = useAuth()
 
   useEffect(() => {
     const t = setInterval(() => setNow(new Date()), 1000)
     return () => clearInterval(t)
   }, [])
+
+  // Show loading while checking authentication
+  if (isLoading) {
+    return (
+      <div className="loading-container">
+        <div>Đang tải...</div>
+      </div>
+    )
+  }
+
+  // Show login if not authenticated
+  if (!isAuthenticated) {
+    return <Login />
+  }
 
   const pad2 = (n: number) => String(n).padStart(2, '0')
 
@@ -38,8 +55,11 @@ function App() {
           <img src={Logo} alt="Logo" className="sidebar-logo" />
           <h2 className="app-title">BK Tutor</h2>
           <div className="avatar">Avatar</div>
-          <div className="user-name">NGUYỄN NHẬT QUANG</div>
-          <div className="user-id">2352973</div>
+          <div className="user-name">{user?.full_name || user?.username}</div>
+          <div className="user-id">{user?.email}</div>
+          <button className="logout-button" onClick={logout}>
+            Đăng xuất
+          </button>
         </div>
 
         <nav className="sidebar-nav">
