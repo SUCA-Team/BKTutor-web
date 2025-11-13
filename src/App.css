@@ -8,23 +8,42 @@
 	padding: 0;         /* no default padding */
 }
 
+/* Import local Comfortaa font from assets and apply globally */
+@font-face {
+	font-family: 'Comfortaa';
+	src: url('./assets/Comfortaa-Regular.ttf') format('truetype');
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap;
+}
+
+/* Use Comfortaa as the default for all text */
+html, body, .container {
+	font-family: 'Comfortaa', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
 /* Two-column layout: sidebar + content */
 .container {
 	display: flex;
 	flex-direction: row;
-  margin: 0
+	margin: 0;
+	height: 100vh; /* ensure the app layout fills the viewport height */
 }
 
 .sidebar {
 	box-sizing: border-box;
- 	flex: 0 0 20%;      /* fixed 20% of the container */
- 	width: 20%;
-  	min-width: 0;       /* allow shrinking on small screens */
- 	background-color: #032B91; /* sidebar background */
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    justify-content: space-between;
+	flex: 0 0 20%;      /* fixed 20% of the container */
+	width: 20%;
+	min-width: 0;       /* allow shrinking on small screens */
+	background-color: #032B91; /* sidebar background */
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	justify-content: space-between;
+	height: 100vh; /* keep sidebar height equal to viewport */
+	position: sticky;
+	top: 0;
+	overflow: auto; /* allow internal scrolling in the sidebar without growing the page */
 }
 
 .content-container {
@@ -39,13 +58,17 @@
 	list-style: none;
 	margin: 0;
 	padding: 0; /* anchors will span full sidebar width */
+	display: flex;
+	flex-direction: column;
+	gap: 1rem; /* add vertical spacing between buttons */
 }
 .sidebar-nav li + li {
-	margin-top: 0.25rem;
+	margin-top: 0; /* spacing now handled by gap */
 }
 .sidebar a {
 	color: #ffffff;
 	text-decoration: none;
+  font-size: 1.7rem; /* adjust font size for better readability */
 	display: flex;
 	width: 100%;            /* fill sidebar width */
 	height: 8vh;           /* 8% of viewport height */
@@ -68,9 +91,15 @@
 
 /* Content readability */
 .content-container {
-	color: #fff;
-	padding: 1rem;
-	overflow: auto;
+ 	color: #fff;
+ 	padding: 0; /* page padding applied per-page except settings */
+ 	height: 100vh; /* keep content area equal to viewport */
+ 	overflow-y: auto; /* content scrolls internally */
+}
+
+/* Apply standard page padding to all pages except Settings */
+.content-container > :not(.settings-page) {
+  padding: 1.25rem 1.5rem;
 }
 
 /* Home page search and grid */
@@ -108,63 +137,88 @@
 .info-card {
 	background: #ffffff;
 	color: #001853;
-	border-radius: 16px;
-	padding: 2rem;
+	border-radius: 24px;
+	padding: 2.5rem 2.5rem;
 	display: flex;
-	gap: 2rem;
+	gap: 2.5rem;
 	align-items: center;
-	box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-	margin-bottom: 2rem;
+	box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+	margin-bottom: 2.25rem;
+	position: relative;
+	overflow: hidden;
+  font-size: x-large;
+	/* decorative pattern will be rendered in a pseudo-element so we can control opacity */
+}
+
+.info-card::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background-image: url('./assets/Background-pattern.png');
+	 background-repeat: no-repeat;
+	 /* push the pattern past the right edge so it extends outside the card
+		 and covers the bottom-right white gap */
+	 background-position: 300% 100%; /* x% y% where >100 moves image outside */
+	 background-size: 80%; /* make it taller so it covers bottom area */
+	opacity: 0.7; /* requested opacity for the pattern */
+	z-index: 0;
+	pointer-events: none;
 }
 .info-left {
-	flex: 0 0 220px;
+	flex: 0 0 260px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 }
 .info-avatar {
-	width: 160px;
-	height: 160px;
+	width: 200px;
+	height: 200px;
 	border-radius: 50%;
 	background: #666;
 	color: #fff;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	font-size: 1.1rem;
+	font-size: 1.25rem;
 }
 
 .info-avatar-img {
-	width: 160px;
-	height: 160px;
+	width: 200px;
+	height: 200px;
 	border-radius: 50%;
 	object-fit: cover;
-	border: 6px solid rgba(255,255,255,0.9);
+	border: 6px solid rgba(255,255,255,0.95);
 	display: block;
 }
 .info-right {
 	flex: 1 1 auto;
+	padding-right: 2rem; /* keep text away from decorative pattern */
 }
 .info-name {
 	margin: 0 0 0.25rem 0;
-	font-size: 1.6rem;
+	font-size: 2rem;
+	letter-spacing: 0.02em;
 }
 .info-faculty {
 	color: #2b6cb0;
 	margin-bottom: 1rem;
+	font-size: 1rem;
 }
 .info-rows .row {
 	display: flex;
 	gap: 1.25rem;
-	margin-top: 0.6rem;
+	margin-top: 0.8rem;
+	align-items: center;
 }
 .info-rows .label {
-	width: 80px;
-	font-weight: 600;
+	width: 110px;
+	font-weight: 700;
 	opacity: 0.85;
+	color: #2b2b2b;
 }
 .info-rows .value {
 	flex: 1 1 auto;
+	color: #222;
 }
 
 @media (max-width: 880px) {
@@ -198,6 +252,7 @@
 	box-sizing: border-box;
 	overflow: hidden;
 	transition: transform 160ms ease, box-shadow 160ms ease;
+  font-size: x-large;
 }
 
 /* registered button style (after user registers from Home) */
@@ -223,26 +278,104 @@
 }
 
 .my-courses-list {
-	display: grid;
-	grid-template-columns: 1fr;
+	display: flex;
+	flex-direction: row;
 	gap: 1.5rem;
-	padding-top: 1rem;
+	padding: 1rem 0;
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+	scroll-behavior: smooth;
 }
 
+/* Make cards a horizontal scroller; each card is fixed viewport size */
 .my-course-card {
 	background: #ffffff;
 	border-radius: 16px;
-	padding: 2rem;
-	width: min(680px, 70%);
+	padding: 1.6rem;
+	width: 22vw;
+	min-width: 22vw;
+	height: 67vh;
+	box-sizing: border-box;
 	color: #001753;
 	box-shadow: 0 2px 0 rgba(0,0,0,0.06);
+	display: flex;
+	flex-direction: column;
 }
-.my-course-card .course-code.big { font-size: 28px; color: #001753; margin-top: 0.5rem; }
-.my-course-card .course-title.big { font-size: 36px; margin: .5rem 0 1rem; color: #001753; }
-.my-course-card .tutor { margin-top: 0.5rem; color: #001753; }
-.my-course-card hr { border: none; border-top: 2px solid rgba(0,0,0,0.08); margin: 1rem 0; }
-.my-course-actions { display:flex; justify-content:flex-end; margin-top: 1.5rem; }
-.btn-details { background: #001753; color: #fff; padding: 1rem 2rem; border-radius: 12px; border:none; cursor:pointer; font-size: 1.05rem; }
+
+.my-course-card .card-inner {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+  font-size: x-large;
+}
+
+.my-course-card .course-code.big { font-size: 35px; color: #001753; margin-top: 0.25rem; }
+.my-course-card .course-title.big { font-size: 35px; color: #001753; }
+.my-course-card .tutor { margin-top: 0.5rem; color: #001753; font-size: 25px; }
+.my-course-card hr { border: none; border-top: 1px solid rgba(0,0,0,0.06); margin: 0.75rem 0;}
+.my-course-actions { display:flex; justify-content:center; align-items: center ; margin-top: auto; }
+.btn-details { align-items: center; background: #001753; height: 130%; width: 120%; color: #fff; padding: 0.8rem 1.2rem; border-radius: 5%; border:none; cursor:pointer; font-size: 1.5rem; }
+
+/* horizontal scrollbar styling (WebKit) */
+.my-courses-list::-webkit-scrollbar { height: 12px; }
+.my-courses-list::-webkit-scrollbar-track { background: rgb(25, 17, 114); }
+.my-courses-list::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.339); border-radius: 8px; }
+
+/* Settings page styles */
+.settings-page { padding: 1rem 2rem 3rem; }
+.settings-card {
+	background: #fff;
+	border-radius: 16px;
+	padding: 1.25rem 1.5rem;
+	margin-bottom: 1.25rem;
+	color: #001753;
+  font-size: medium;
+}
+.settings-label { font-weight: 700; letter-spacing: 0.06em; color: #001753; margin-bottom: 0.75rem; }
+.settings-control { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.settings-select {
+	min-width: 260px;
+	padding: 0.9rem 1rem;
+	border-radius: 8px;
+	border: 1px solid rgba(0,0,0,0.08);
+	background: #fff;
+	color: #001753;
+	font-size: 1rem;
+}
+
+/* Toggle switch */
+.toggle-wrapper { display:flex; align-items:center; }
+.toggle-switch {
+	width: 56px;
+	height: 32px;
+	background: rgba(0,0,0,0.08);
+	border-radius: 20px;
+	border: none;
+	position: relative;
+	padding: 0;
+	cursor: pointer;
+}
+.toggle-switch .knob {
+	position: absolute;
+	top: 4px;
+	left: 4px;
+	width: 24px;
+	height: 24px;
+	background: #fff;
+	border-radius: 50%;
+	box-shadow: 0 1px 2px rgba(0,0,0,0.12);
+	transition: transform 180ms ease;
+}
+.toggle-switch.on { background: #001753; }
+.toggle-switch.on .knob { transform: translateX(24px); }
+
+.support-grid { display:flex; gap: 2.5rem; align-items: center; }
+.support-link { color: #001753; text-decoration: none; font-weight: 600; }
+
+@media (max-width: 900px) {
+	.settings-select { min-width: 160px; }
+	.support-grid { flex-direction: column; gap: 0.5rem; align-items: flex-start; }
+}
 
 .course-card:hover {
 	transform: scale(1.03);
@@ -250,24 +383,25 @@
 }
 .course-title {
 	margin: 0.5rem 0 0 0;
-	font-size: 1.25rem;
+	font-size: 1.8rem;
 }
 .course-code {
-	font-size: 0.85rem;
+	font-size: 1.3rem;
 	opacity: 0.8;
 }
 .tutor {
 	margin-top: 0.6rem;
-	font-size: 0.95rem;
+	font-size: 1.5rem;
 }
 .meta {
-	font-size: 0.85rem;
+	font-size: 1.5rem;
 	opacity: 0.85;
 }
 .card-actions {
 	display: flex;
 	justify-content: flex-end;
 	margin-top: 1rem;
+  height: 5vh;
 }
 .btn-register {
 	background: rgba(0,0,0,0.3);
@@ -285,15 +419,35 @@
 
 /* Sidebar header (logo, avatar, name) */
 .sidebar-header {
+	height: 30vh;
+	position: relative;
+	padding: 0; /* padding will be handled by header content */
+}
+
+.sidebar-bg {
+	position: absolute;
+  height: 18vh;
+  opacity: 0.3;
+	inset: 0;
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-position: center;
-	padding: 1.25rem 1rem 2rem 1rem;
-	text-align: center;
+	z-index: 0;
+}
+
+.sidebar-header-content {
+  margin-top: 1vh;
+	position: relative;
+	z-index: 1;
+	padding: 0.75rem 1rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 	color: #fff;
 }
 .sidebar-logo {
-	height: 48px;
+  height: 80px;
 	display: block;
 	margin: 0.25rem auto 0.5rem auto;
 }
@@ -303,9 +457,9 @@
 	font-weight: 500;
 }
 .avatar {
-	width: 110px;
-	height: 110px;
-	margin: 0.5rem auto;
+	width: 120px;
+	height: 120px;
+  margin-top: 0;
 	border-radius: 50%;
 	background: #555;
 	color: #eee;
@@ -316,14 +470,14 @@
 	font-size: 1.2rem;
 }
 .user-name {
-	margin-top: 0.75rem;
-	font-size: 1.1rem;
+	margin-top: 2rem;
+	font-size: 25px;
 	font-weight: 700;
 	text-align: center;
 }
 .user-id {
-	margin-top: 0.25rem;
-	font-size: 1rem;
+	margin-top: 1rem;
+	font-size: 25px;
 	opacity: 0.9;
 }
 
@@ -340,10 +494,13 @@
 	padding: 0.5rem 0.9rem;
 	border-radius: 10px;
 	font-weight: 600;
+  font-size: x-large;
 	margin-bottom: 0.6rem;
+  height: 30px;
+  width: 100px;
 }
 .date-line {
-	font-size: 1rem;
+	font-size: 1.5rem;
 	margin-top: 0.5rem;
 }
 .time-line {
