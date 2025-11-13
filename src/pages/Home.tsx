@@ -1,54 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-
-type Course = {
-  id: string
-  code: string
-  title: string
-  tutor: string
-  time?: string
-  mode?: string
-  clazz?: string
-  content?: string
-}
-
-const SAMPLE_COURSES: Course[] = [
-  {
-    id: '1',
-    code: 'CO3001',
-    title: 'Công nghệ Phần mềm',
-    tutor: 'Đỗ Minh Huy',
-    time: 'Thứ 3 20h-22h',
-    mode: 'Online',
-    clazz: 'CN01',
-  },
-  {
-    id: '2',
-    code: 'CO2013',
-    title: 'Hệ cơ sở Dữ liệu',
-    tutor: 'Trần Văn Duy',
-    time: 'Thứ 3 10h-11h50',
-    mode: 'Offline',
-    clazz: 'CN01',
-  },
-  {
-    id: '3',
-    code: 'LA3025',
-    title: 'Tiếng Nhật 5',
-    tutor: 'Tô Nguyễn Khoa',
-    time: 'Thứ 4 15h-16h50',
-    mode: 'Online',
-    clazz: 'CN01',
-  },
-  {
-    id: '4',
-    code: 'MA1001',
-    title: 'Toán rời rạc',
-    tutor: 'Nguyễn Văn A',
-    time: 'Thứ 2 8h-10h',
-    mode: 'Offline',
-    clazz: 'CN02',
-  },
-]
+import { courseAPI } from '../services/api'
+import type { Course } from '../services/api'
 
 function normalizeSearch(s: string) {
   return s
@@ -74,63 +26,69 @@ export default function Home() {
 
   // fetch courses from API on mount
   useEffect(() => {
-    const ac = new AbortController()
     async function load() {
       setLoading(true)
       setError(null)
       try {
-        const res = await fetch('/api/courses', { signal: ac.signal })
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        const data = await res.json()
-        // expect data to be Course[]; do a basic guard
-        if (Array.isArray(data)) setCourses(data)
-        else throw new Error('Invalid data')
-      } catch (err) {
-        // handle unknown error types (AbortError from fetch will be a DOMException in browsers)
-        if (err instanceof DOMException && err.name === 'AbortError') return
-        const msg = err instanceof Error ? err.message : String(err)
-        setError(msg || 'Lỗi khi tải dữ liệu')
+        const data = await courseAPI.getAllCourses()
+        setCourses(data)
+      } catch (err: any) {
+        const msg = err.response?.data?.detail || err.message || 'Lỗi khi tải dữ liệu'
+        setError(msg)
       } finally {
         setLoading(false)
       }
     }
 
     load()
-    return () => ac.abort()
   }, [reloadKey])
 
-  // registered courses (persist in localStorage)
-  const [registered, setRegistered] = useState<Record<string, Course>>({})
+  // registered courses 
+  const [registeredCourses, setRegisteredCourses] = useState<Course[]>([])
+  const [registeringCourses, setRegisteringCourses] = useState<Set<string>>(new Set())
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem('bktutor_registered')
-      if (raw) {
-        const arr = JSON.parse(raw) as Course[]
-        const map: Record<string, Course> = {}
-        arr.forEach((c) => (map[c.id] = c))
-        setRegistered(map)
+    async function loadMyCourses() {
+      try {
+        const myCourses = await courseAPI.getMyCourses()
+        setRegisteredCourses(myCourses)
+      } catch (err) {
+        // User might not be logged in, ignore error
+        console.warn('Could not load user courses:', err)
       }
-    } catch {
-      // ignore
     }
+    loadMyCourses()
   }, [])
 
-  function saveRegistered(map: Record<string, Course>) {
-    setRegistered(map)
-    const arr = Object.values(map)
-    try {
-      localStorage.setItem('bktutor_registered', JSON.stringify(arr))
-    } catch {
-      // ignore
-    }
-  }
+  const registeredCoursesMap = useMemo(() => {
+    const map: Record<string, Course> = {}
+    registeredCourses.forEach((c) => (map[c.code] = c))
+    return map
+  }, [registeredCourses])
 
-  function handleRegister(c: Course) {
-    // add to registered map
-    const next = { ...registered }
-    next[c.id] = c
-    saveRegistered(next)
+  async function handleRegister(c: Course) {
+    if (registeringCourses.has(c.code)) return
+    
+    setRegisteringCourses(prev => new Set([...prev, c.code]))
+    try {
+      const result = await courseAPI.registerForCourse(c.code)
+      if (result.success) {
+        // Refresh the registered courses
+        const myCourses = await courseAPI.getMyCourses()
+        setRegisteredCourses(myCourses)
+      } else {
+        alert(result.message || 'Đăng ký thất bại')
+      }
+    } catch (err: any) {
+      const msg = err.response?.data?.detail || err.message || 'Đăng ký thất bại'
+      alert(msg)
+    } finally {
+      setRegisteringCourses(prev => {
+        const next = new Set(prev)
+        next.delete(c.code)
+        return next
+      })
+    }
   }
 
   // infinite scroll: load more when sentinel becomes visible
@@ -148,10 +106,9 @@ export default function Home() {
   }, [loading, courses.length, pageSize])
 
   const filtered = useMemo(() => {
-    const source = courses.length ? courses : SAMPLE_COURSES
-    if (!q) return source.slice(0, pageSize)
+    if (!q) return courses.slice(0, pageSize)
     const nq = normalizeSearch(q)
-    return source.filter((c) => {
+    return courses.filter((c: Course) => {
       const title = normalizeSearch(c.title)
       const tutor = normalizeSearch(c.tutor)
       return title.includes(nq) || tutor.includes(nq)
@@ -183,29 +140,43 @@ export default function Home() {
       <h1 className="page-title">Khóa học đề xuất</h1>
 
       <div className="course-grid">
-        {filtered.map((c) => (
-          <article key={c.id} className="course-card">
-            <div className="card-head">
-              <div className="course-code">{c.code}</div>
-              <h2 className="course-title">{c.title}</h2>
-            </div>
-            <div className="card-body">
-              <div className="tutor">Tutor: {c.tutor}</div>
-              <div className="meta">{c.time} • {c.mode} • {c.clazz}</div>
-            </div>
-            <div className="card-actions">
-              {registered[c.id] ? (
-                <button className="btn-registered" aria-label="Đã đăng ký" disabled>
-                  Đã đăng ký
-                </button>
-              ) : (
-                <button className="btn-register" onClick={() => handleRegister(c)}>
-                  Đăng ký
-                </button>
-              )}
-            </div>
-          </article>
-        ))}
+        {filtered.map((c: Course) => {
+          const isRegistered = registeredCoursesMap[c.code]
+          const isRegistering = registeringCourses.has(c.code)
+          
+          return (
+            <article key={c.id} className="course-card">
+              <div className="card-head">
+                <div className="course-code">{c.code}</div>
+                <h2 className="course-title">{c.title}</h2>
+              </div>
+              <div className="card-body">
+                <div className="tutor">Tutor: {c.tutor}</div>
+                <div className="meta">{c.time} • {c.mode} • {c.clazz}</div>
+                {c.max_students && (
+                  <div className="enrollment">
+                    {c.enrolled_count || 0}/{c.max_students} học viên
+                  </div>
+                )}
+              </div>
+              <div className="card-actions">
+                {isRegistered ? (
+                  <button className="btn-registered" aria-label="Đã đăng ký" disabled>
+                    Đã đăng ký
+                  </button>
+                ) : (
+                  <button 
+                    className="btn-register" 
+                    onClick={() => handleRegister(c)}
+                    disabled={isRegistering}
+                  >
+                    {isRegistering ? 'Đang đăng ký...' : 'Đăng ký'}
+                  </button>
+                )}
+              </div>
+            </article>
+          )
+        })}
         {/* sentinel for infinite scroll */}
         <div ref={sentinelRef} />
       </div>

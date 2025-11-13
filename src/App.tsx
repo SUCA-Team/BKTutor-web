@@ -1,17 +1,34 @@
 import './App.css'
 import { NavLink, Routes, Route } from 'react-router-dom'
 import ROUTES from './pages/routes'
+import Login from './components/Login'
 import Logo from './assets/Logo.png'
 import BG from './assets/Background-pattern.png'
 import { useEffect, useState } from 'react'
+import { useAuth } from './contexts/AuthContext'
 
 function App() {
   const [now, setNow] = useState(() => new Date())
+  const { isAuthenticated, user, logout, isLoading } = useAuth()
 
   useEffect(() => {
     const t = setInterval(() => setNow(new Date()), 1000)
     return () => clearInterval(t)
   }, [])
+
+  // Show loading while checking authentication
+  if (isLoading) {
+    return (
+      <div className="loading-container">
+        <div>Đang tải...</div>
+      </div>
+    )
+  }
+
+  // Show login if not authenticated
+  if (!isAuthenticated) {
+    return <Login />
+  }
 
   const pad2 = (n: number) => String(n).padStart(2, '0')
 
