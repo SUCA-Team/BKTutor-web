@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react'
 import { courseAPI } from '../services/api'
 import type { Course } from '../services/api'
+import CourseDetail from '../components/CourseDetail'
 
 export default function MyCourses() {
   const [courses, setCourses] = useState<Course[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [active, setActive] = useState<Course | null>(null)
 
   useEffect(() => {
     async function loadMyCourses() {
@@ -67,6 +69,10 @@ export default function MyCourses() {
             ))}
           </div>
         )
+      )}
+
+      {active && (
+        <CourseDetail course={active} onClose={() => setActive(null)} />
       )}
     </main>
   )

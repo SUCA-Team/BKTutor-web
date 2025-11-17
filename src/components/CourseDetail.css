@@ -1,0 +1,111 @@
+.course-detail-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 15, 60, 0.85);
+  backdrop-filter: blur(2px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-y: auto;
+  z-index: 1000;
+  padding: 32px 24px;
+  box-sizing: border-box;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.course-detail-container {
+  width: 100%;
+  max-width: 1180px;
+  background: #021549;
+  position: relative;
+  color: #ffffff;
+  min-height: 80vh;
+  padding: 0 50px 40px;
+  box-sizing: border-box;
+  border-radius: 5%; /* flush edge look */
+}
+
+.course-detail-close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  background: none;
+  color: #ffffff;
+  font-size: 32px;
+  border: none;
+  cursor: pointer;
+  line-height: 1;
+}
+.course-detail-close:hover {
+  color: #36b5ff;
+}
+
+.course-detail-title {
+  margin: 32px 0 24px;
+  font-size: 42px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.course-detail-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.study-material-card,
+.notification-card {
+  background: #f9f9fb;
+  border-radius: 18px;
+  padding: 32px;
+  color: #021549;
+  min-height: 260px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+}
+
+.study-material-card h2,
+.notification-card h2 {
+  margin: 0 0 24px;
+  font-size: 18px;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.material-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  font-size: 16px;
+}
+
+.material-list li a {
+  color: #0273a5;
+  text-decoration: none;
+  font-weight: 500;
+}
+.material-list li a:hover { text-decoration: underline; }
+
+.material-icon { margin-right: 12px; }
+
+.notification-empty {
+  font-size: 28px;
+  text-align: center;
+  margin-top: 30px;
+  color: #7d879d;
+  font-weight: 500;
+}
+
+.course-detail-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 40px;
+  font-size: 12px;
+  color: #d1d6e4;
+}
+
+@media (min-width: 900px) {
+  .course-detail-cards { flex-direction: column; }
+}
