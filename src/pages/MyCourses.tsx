@@ -57,7 +57,7 @@ export default function MyCourses() {
                     <div>Thời gian: {c.time}</div>
                     <div>Hình thức: {c.mode}</div>
                     <div>Lớp: {c.class_code}</div>
-                    {c.content && <div>Nội dung: {c.content}</div>}
+                    <div>Nội dung: {c.content}</div>
                   </div>
 
                   <div className="my-course-actions">

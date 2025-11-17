@@ -152,8 +152,10 @@ export default function Home() {
               </div>
               <div className="card-body">
                 <div className="tutor">Tutor: {c.tutor}</div>
-                <div className="meta">{c.time} • {c.mode} • {c.class_code}
-                </div>
+                <div className="meta">Thời gian: {c.time} </div>
+                <div className="meta">Hình thức: {c.mode}</div>
+                <div className="meta">Lớp: {c.class_code}</div>
+                <div className="meta">Nội dung: {c.content}</div>
               </div>
               <div className="card-actions">
                 {isRegistered ? (

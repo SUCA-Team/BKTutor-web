@@ -240,7 +240,7 @@ html, body, .container {
 	grid-template-columns: repeat(auto-fill, minmax(var(--card-w), 1fr));
 	grid-auto-rows: var(--card-h);
 	gap: 1rem;
-	row-gap: 3rem;
+	row-gap: 6rem;
 	justify-content: start;
 }
 
@@ -255,7 +255,7 @@ html, body, .container {
 	flex-direction: column;
 	justify-content: space-between;
 	width: var(--card-w);
-	height: var(--card-h);
+	height: 20rem;
 	box-sizing: border-box;
 	overflow: hidden;
 	transition: transform 160ms ease, box-shadow 160ms ease;
@@ -403,11 +403,12 @@ hr.solid {
 	opacity: 0.8;
 }
 .tutor {
-	margin-top: 0.6rem;
-	font-size: 1.5rem;
+	margin-top: 0.4rem;
+	margin-bottom: 1.5rem;
+	font-size: 1.2rem;
 }
 .meta {
-	font-size: 1.5rem;
+	font-size: 1rem;
 	opacity: 0.85;
 }
 .card-actions {
