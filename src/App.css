@@ -320,8 +320,8 @@ html, body, .container {
   font-size: large;
 }
 
-.my-course-card .course-code.big { font-size: 35px; color: #001753; margin-top: 0.25rem; margin-bottom: 1rem; }
-.my-course-card .course-title.big { font-size: 35px; color: #001753; margin-bottom: 0.5rem;}
+.my-course-card .course-code.big { font-size: 35px; color: #001753; margin-top: 0.5rem; margin-bottom: 1.5rem; font-weight: bold;}
+.my-course-card .course-title.big { font-size: 35px; color: #001753; margin-bottom: 0.5rem; font-weight: bold;}
 .my-course-card .tutor { margin-top: 0.5rem; color: #001753; font-size: 25px; }
 .my-course-card hr { border: none; border-top: 2px solid #000; margin: 1rem 0;}
 .my-course-actions { display:flex; justify-content:center; align-items: center ; margin-top: auto; }

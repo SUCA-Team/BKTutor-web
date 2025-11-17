@@ -47,8 +47,7 @@ export default function MyCourses() {
                 <div className="card-inner">
                   <div className="meta-label">Mã môn học</div>
                   <div className="course-code big">{c.code}</div>
-                  <h2 className="course-title big">{c.title}</h2>
-
+                  <div className="course-title big">{c.name}</div>
                   <div className="tutor">Tutor: <strong>{c.tutor}</strong></div>
 
                   <hr />
