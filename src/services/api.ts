@@ -22,17 +22,15 @@ export interface User {
 }
 
 export interface Course {
-  id: string;
-  code: string;
-  title: string;
-  tutor: string;
-  time?: string;
-  mode?: string;
-  clazz?: string;
-  content?: string;
-  max_students?: number;
-  enrolled_count?: number;
-  is_registered?: boolean;
+  code: string
+  name: string
+  tutor: string
+  time: string
+  mode: string
+  clazz: string
+  content?: string
+  id: string
+  created_at: string
 }
 
 export interface LoginRequest {

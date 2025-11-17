@@ -61,7 +61,7 @@ export default function MyCourses() {
                   </div>
 
                   <div className="my-course-actions">
-                    <button className="btn-details">Chi Tiết</button>
+                    <button className="btn-details" onClick={() => setActive(c)}>Chi Tiết</button>
                   </div>
                 </div>
               </article>
@@ -72,3 +72,9 @@ export default function MyCourses() {
     </main>
   )
 }
+
+
+
+
+
+

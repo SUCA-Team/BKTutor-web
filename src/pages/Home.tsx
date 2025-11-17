@@ -109,7 +109,7 @@ export default function Home() {
     if (!q) return courses.slice(0, pageSize)
     const nq = normalizeSearch(q)
     return courses.filter((c: Course) => {
-      const title = normalizeSearch(c.title)
+      const title = normalizeSearch(c.name)
       const tutor = normalizeSearch(c.tutor)
       return title.includes(nq) || tutor.includes(nq)
     }).slice(0, pageSize)
@@ -148,16 +148,12 @@ export default function Home() {
             <article key={c.id} className="course-card">
               <div className="card-head">
                 <div className="course-code">{c.code}</div>
-                <h2 className="course-title">{c.title}</h2>
+                <h2 className="course-title">{c.name}</h2>
               </div>
               <div className="card-body">
                 <div className="tutor">Tutor: {c.tutor}</div>
-                <div className="meta">{c.time} • {c.mode} • {c.clazz}</div>
-                {c.max_students && (
-                  <div className="enrollment">
-                    {c.enrolled_count || 0}/{c.max_students} học viên
-                  </div>
-                )}
+                <div className="meta">{c.time} • {c.mode} • {c.clazz}
+                </div>
               </div>
               <div className="card-actions">
                 {isRegistered ? (
