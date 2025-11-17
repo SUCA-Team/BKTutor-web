@@ -92,7 +92,9 @@ html, body, .container {
 /* Content readability */
 .content-container {
  	color: #fff;
- 	padding: 0; /* page padding applied per-page except settings */
+	padding-top: 1%;
+ 	padding-left: 3%; /* page padding applied per-page except settings */
+	padding-right: 3%;
  	height: 100vh; /* keep content area equal to viewport */
  	overflow-y: auto; /* content scrolls internally */
 }
@@ -107,27 +109,29 @@ html, body, .container {
 	display: flex;
 	gap: 0.5rem;
 	align-items: center;
-	margin: 1rem 0 1.5rem 0;
+	margin: 0rem 0 6rem 0;
 }
 .home-page .search-input {
 	flex: 1 1 auto;
-	padding: 0.8rem 1rem;
-	border-radius: 24px;
+	padding: 1rem 3rem;
+	border-radius: 60px;
 	border: none;
 	font-size: 1rem;
+	height: 40px;
+	font-size: x-large;
 }
 .home-page .search-button {
 	background: #fff;
 	color: #001753;
 	border: none;
-	width: 44px;
-	height: 44px;
+	width: 75px;
+	height: 75px;
 	border-radius: 999px;
 	cursor: pointer;
 }
 .page-title {
-	font-size: 2rem;
-	margin: 0 0 1rem 0;
+	font-size: 3rem;
+	margin: 0 0 3rem 0;
 }
 
 /* Info page card */
@@ -187,7 +191,7 @@ html, body, .container {
 	height: 200px;
 	border-radius: 50%;
 	object-fit: cover;
-	border: 6px solid rgba(255,255,255,0.95);
+	border: 2px solid rgba(255,255,255,0.95);
 	display: block;
 }
 .info-right {
@@ -235,15 +239,18 @@ html, body, .container {
 	/* allow dynamic number of columns depending on viewport and number of cards */
 	grid-template-columns: repeat(auto-fill, minmax(var(--card-w), 1fr));
 	grid-auto-rows: var(--card-h);
-	gap: 1.25rem;
+	gap: 1rem;
+	row-gap: 3rem;
 	justify-content: start;
 }
 
 .course-card {
 	background: #003EDB; /* card background requested */
-	border-radius: 12px;
+	border-style: solid;
+	border-width: 5px;
+	border-color: #ffffff;
+	border-radius: 30px;
 	padding: 1rem;
-	border: 2px solid rgba(255,255,255,0.14);
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -265,6 +272,10 @@ html, body, .container {
 	font-weight: 600;
 	cursor: default;
 	box-shadow: none;
+	width: 200px;
+	height: 50px;
+	font-size: 1.2rem;
+	font-weight: 600;
 }
 
 /* My Courses page styles */
@@ -290,7 +301,7 @@ html, body, .container {
 /* Make cards a horizontal scroller; each card is fixed viewport size */
 .my-course-card {
 	background: #ffffff;
-	border-radius: 16px;
+	border-radius: 24px;
 	padding: 1.6rem;
 	width: 22vw;
 	min-width: 22vw;
@@ -306,16 +317,18 @@ html, body, .container {
 	display: flex;
 	flex-direction: column;
 	height: 100%;
-  font-size: x-large;
+  font-size: large;
 }
 
-.my-course-card .course-code.big { font-size: 35px; color: #001753; margin-top: 0.25rem; }
-.my-course-card .course-title.big { font-size: 35px; color: #001753; }
+.my-course-card .course-code.big { font-size: 35px; color: #001753; margin-top: 0.25rem; margin-bottom: 1rem; }
+.my-course-card .course-title.big { font-size: 35px; color: #001753; margin-bottom: 0.5rem;}
 .my-course-card .tutor { margin-top: 0.5rem; color: #001753; font-size: 25px; }
-.my-course-card hr { border: none; border-top: 1px solid rgba(0,0,0,0.06); margin: 0.75rem 0;}
+.my-course-card hr { border: none; border-top: 2px solid #000; margin: 1rem 0;}
 .my-course-actions { display:flex; justify-content:center; align-items: center ; margin-top: auto; }
-.btn-details { align-items: center; background: #001753; height: 130%; width: 120%; color: #fff; padding: 0.8rem 1.2rem; border-radius: 5%; border:none; cursor:pointer; font-size: 1.5rem; }
-
+.btn-details { align-items: center; background: #001753; height: 160%; width: 120%; color: #fff; padding: 0.8rem 1.2rem; border-radius: 15px; border:none; cursor:pointer; font-size: 1.5rem;}
+hr.solid {
+        border-top: 2px solid #333;
+    }
 /* horizontal scrollbar styling (WebKit) */
 .my-courses-list::-webkit-scrollbar { height: 12px; }
 .my-courses-list::-webkit-scrollbar-track { background: rgb(25, 17, 114); }
@@ -326,13 +339,13 @@ html, body, .container {
 .settings-card {
 	background: #fff;
 	border-radius: 16px;
-	padding: 1.25rem 1.5rem;
-	margin-bottom: 1.25rem;
+	padding: 2rem;
+	margin-bottom: 2rem;
 	color: #001753;
-  font-size: medium;
+  font-size: x-large;
 }
-.settings-label { font-weight: 700; letter-spacing: 0.06em; color: #001753; margin-bottom: 0.75rem; }
-.settings-control { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.settings-label { font-weight: 700; letter-spacing: 0.06em; color: #001753; margin-bottom: 2rem; font-size: x-large;}
+.settings-control { display: flex; justify-content: space-between; align-items: center; gap: 1rem;}
 .settings-select {
 	min-width: 260px;
 	padding: 0.9rem 1rem;
@@ -401,7 +414,8 @@ html, body, .container {
 	display: flex;
 	justify-content: flex-end;
 	margin-top: 1rem;
-  height: 5vh;
+	padding-right: 0;
+  	height: 5vh;
 }
 .btn-register {
 	background: rgba(0,0,0,0.3);
@@ -410,6 +424,10 @@ html, body, .container {
 	padding: 0.6rem 1rem;
 	border-radius: 999px;
 	cursor: pointer;
+	width: 200px;
+	height: 50px;
+	font-size: 1.2rem;
+	font-weight: 600;
 }
 
 @media (max-width: 880px) {
@@ -436,7 +454,7 @@ html, body, .container {
 }
 
 .sidebar-header-content {
-  margin-top: 1vh;
+	margin-top: 3%;
 	position: relative;
 	z-index: 1;
 	padding: 0.75rem 1rem;
@@ -449,7 +467,7 @@ html, body, .container {
 .sidebar-logo {
   height: 80px;
 	display: block;
-	margin: 0.25rem auto 0.5rem auto;
+	margin: -0.4rem auto 1rem auto;
 }
 .app-title {
 	font-size: 1.6rem;
@@ -459,14 +477,14 @@ html, body, .container {
 .avatar {
 	width: 120px;
 	height: 120px;
-  margin-top: 0;
+  	margin-top: 0.3rem;
 	border-radius: 50%;
 	background: #555;
 	color: #eee;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	border: 6px solid rgba(255,255,255,0.9);
+	border: 2px solid rgba(255,255,255,0.9);
 	font-size: 1.2rem;
 }
 .user-name {
@@ -491,7 +509,8 @@ html, body, .container {
 	display: inline-block;
 	background: #fff;
 	color: #032B91;
-	padding: 0.5rem 0.9rem;
+	padding: 0.8rem 1rem;
+	padding-top: 1rem;
 	border-radius: 10px;
 	font-weight: 600;
   font-size: x-large;

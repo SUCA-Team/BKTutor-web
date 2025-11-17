@@ -20,13 +20,11 @@ const FALLBACK: Student = {
 export default function Info() {
   const [student, setStudent] = useState<Student | null>(null)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const ac = new AbortController()
     async function load() {
       setLoading(true)
-      setError(null)
       try {
         const res = await fetch('/api/student', { signal: ac.signal })
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
@@ -35,7 +33,8 @@ export default function Info() {
         else throw new Error('Invalid data')
       } catch (err) {
         if (err instanceof DOMException && err.name === 'AbortError') return
-        setError(err instanceof Error ? err.message : String(err))
+        // Fail silently; do not show errors in UI
+        console.warn('Failed to load /api/student:', err)
       } finally {
         setLoading(false)
       }
@@ -52,7 +51,7 @@ export default function Info() {
       <h1 className="page-title">Thông Tin Sinh Viên</h1>
 
       {loading && <div className="loading">Đang tải thông tin...</div>}
-      {error && <div className="error">Không tải được thông tin: {error}</div>}
+      {/* No error UI: fail silently and use FALLBACK data */}
 
       <section className="info-card">
         <div className="info-left">

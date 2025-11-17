@@ -1,6 +1,54 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { courseAPI } from '../services/api'
-import type { Course } from '../services/api'
+
+type Course = {
+  id: string
+  code: string
+  title: string
+  tutor: string
+  time?: string
+  mode?: string
+  clazz?: string
+  content?: string
+}
+
+const SAMPLE_COURSES: Course[] = [
+  {
+    id: '1',
+    code: 'CO3001',
+    title: 'Công nghệ Phần mềm',
+    tutor: 'Đỗ Minh Huy',
+    time: 'Thứ 3 20h-22h',
+    mode: 'Online',
+    clazz: 'CN01',
+  },
+  {
+    id: '2',
+    code: 'CO2013',
+    title: 'Hệ cơ sở Dữ liệu',
+    tutor: 'Trần Văn Duy',
+    time: 'Thứ 3 10h-11h50',
+    mode: 'Offline',
+    clazz: 'CN01',
+  },
+  {
+    id: '3',
+    code: 'LA3025',
+    title: 'Tiếng Nhật 5',
+    tutor: 'Tô Nguyễn Khoa',
+    time: 'Thứ 4 15h-16h50',
+    mode: 'Online',
+    clazz: 'CN01',
+  },
+  {
+    id: '4',
+    code: 'MA1001',
+    title: 'Toán rời rạc',
+    tutor: 'Nguyễn Văn A',
+    time: 'Thứ 2 8h-10h',
+    mode: 'Offline',
+    clazz: 'CN02',
+  },
+]
 
 function normalizeSearch(s: string) {
   return s
@@ -16,8 +64,7 @@ export default function Home() {
   // data state
   const [courses, setCourses] = useState<Course[]>([])
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
-  const [reloadKey, setReloadKey] = useState(0)
+  const [reloadKey] = useState(0)
 
   // pagination / load-more
   const PAGE_INCREMENT = 6
@@ -28,13 +75,18 @@ export default function Home() {
   useEffect(() => {
     async function load() {
       setLoading(true)
-      setError(null)
       try {
-        const data = await courseAPI.getAllCourses()
-        setCourses(data)
-      } catch (err: any) {
-        const msg = err.response?.data?.detail || err.message || 'Lỗi khi tải dữ liệu'
-        setError(msg)
+        const res = await fetch('/api/courses', { signal: ac.signal })
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        const data = await res.json()
+        // expect data to be Course[]; do a basic guard
+        if (Array.isArray(data)) setCourses(data)
+        else throw new Error('Invalid data')
+      } catch (err) {
+        // handle unknown error types (AbortError from fetch will be a DOMException in browsers)
+        if (err instanceof DOMException && err.name === 'AbortError') return
+        const msg = err instanceof Error ? err.message : String(err)
+        setError(msg || 'Lỗi khi tải dữ liệu')
       } finally {
         setLoading(false)
       }
@@ -118,12 +170,7 @@ export default function Home() {
   return (
     <main className="home-page">
       {loading && <div className="loading">Đang tải...</div>}
-      {error && (
-        <div className="error">
-          <p>{error}</p>
-          <button onClick={() => setReloadKey((k) => k + 1)}>Thử lại</button>
-        </div>
-      )}
+      {/* No error UI: fail silently and use SAMPLE_COURSES */}
       <div className="search-bar">
         <input
           aria-label="Tìm kiếm"
@@ -140,43 +187,29 @@ export default function Home() {
       <h1 className="page-title">Khóa học đề xuất</h1>
 
       <div className="course-grid">
-        {filtered.map((c: Course) => {
-          const isRegistered = registeredCoursesMap[c.code]
-          const isRegistering = registeringCourses.has(c.code)
-          
-          return (
-            <article key={c.id} className="course-card">
-              <div className="card-head">
-                <div className="course-code">{c.code}</div>
-                <h2 className="course-title">{c.title}</h2>
-              </div>
-              <div className="card-body">
-                <div className="tutor">Tutor: {c.tutor}</div>
-                <div className="meta">{c.time} • {c.mode} • {c.clazz}</div>
-                {c.max_students && (
-                  <div className="enrollment">
-                    {c.enrolled_count || 0}/{c.max_students} học viên
-                  </div>
-                )}
-              </div>
-              <div className="card-actions">
-                {isRegistered ? (
-                  <button className="btn-registered" aria-label="Đã đăng ký" disabled>
-                    Đã đăng ký
-                  </button>
-                ) : (
-                  <button 
-                    className="btn-register" 
-                    onClick={() => handleRegister(c)}
-                    disabled={isRegistering}
-                  >
-                    {isRegistering ? 'Đang đăng ký...' : 'Đăng ký'}
-                  </button>
-                )}
-              </div>
-            </article>
-          )
-        })}
+        {filtered.map((c) => (
+          <article key={c.id} className="course-card">
+            <div className="card-head">
+              <div className="course-code">{c.code}</div>
+              <h2 className="course-title">{c.title}</h2>
+            </div>
+            <div className="card-body">
+              <div className="tutor">Tutor: {c.tutor}</div>
+              <div className="meta">{c.time} • {c.mode} • {c.clazz}</div>
+            </div>
+            <div className="card-actions">
+              {registered[c.id] ? (
+                <button className="btn-registered" aria-label="Đã đăng ký" disabled>
+                  Đã đăng ký
+                </button>
+              ) : (
+                <button className="btn-register" onClick={() => handleRegister(c)}>
+                  Đăng ký
+                </button>
+              )}
+            </div>
+          </article>
+        ))}
         {/* sentinel for infinite scroll */}
         <div ref={sentinelRef} />
       </div>
