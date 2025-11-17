@@ -27,7 +27,7 @@ export interface Course {
   tutor: string
   time: string
   mode: string
-  clazz: string
+  class_code: string
   content?: string
   id: string
   created_at: string

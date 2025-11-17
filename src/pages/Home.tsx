@@ -152,7 +152,7 @@ export default function Home() {
               </div>
               <div className="card-body">
                 <div className="tutor">Tutor: {c.tutor}</div>
-                <div className="meta">{c.time} • {c.mode} • {c.clazz}
+                <div className="meta">{c.time} • {c.mode} • {c.class_code}
                 </div>
               </div>
               <div className="card-actions">
