@@ -151,6 +151,7 @@ html, body, .container {
 	position: relative;
 	overflow: hidden;
   font-size: x-large;
+  margin-bottom: 47vh;
 	/* decorative pattern will be rendered in a pseudo-element so we can control opacity */
 }
 
@@ -232,6 +233,8 @@ html, body, .container {
 .home-page {
 	--card-w: 32vw; /* card width = 32% of viewport width */
 	--card-h: 28vh; /* card height = 28% of viewport height */
+	min-height: calc(100vh - 56px); /* leave space for footer, adjust 56px to your footer height */
+	padding-bottom: 70px; /* extra space so footer never overlaps content */
 }
 
 .course-grid {

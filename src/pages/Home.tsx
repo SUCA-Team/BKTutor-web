@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import Footer from '../components/Footer'
 import { courseAPI } from '../services/api'
 import type { Course } from '../services/api'
 
@@ -115,36 +116,36 @@ export default function Home() {
     }).slice(0, pageSize)
   }, [q, courses, pageSize])
 
+  // Use registeredCoursesMap for fast lookup
+  const registered = registeredCoursesMap
+
   return (
-    <main className="home-page">
-      {loading && <div className="loading">Đang tải...</div>}
-      {error && (
-        <div className="error">
-          <p>{error}</p>
-          <button onClick={() => setReloadKey((k) => k + 1)}>Thử lại</button>
+    <>
+      <main className="home-page">
+        {loading && <div className="loading">Đang tải...</div>}
+        {error && (
+          <div className="error">
+            <p>{error}</p>
+            <button onClick={() => setReloadKey((k) => k + 1)}>Thử lại</button>
+          </div>
+        )}
+        <div className="search-bar">
+          <input
+            aria-label="Tìm kiếm"
+            placeholder="Tìm kiếm khóa học, tutor,..."
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            className="search-input"
+          />
+          <button className="search-button" aria-label="Tìm">
+            🔍
+          </button>
         </div>
-      )}
-      <div className="search-bar">
-        <input
-          aria-label="Tìm kiếm"
-          placeholder="Tìm kiếm khóa học, tutor,..."
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          className="search-input"
-        />
-        <button className="search-button" aria-label="Tìm">
-          🔍
-        </button>
-      </div>
 
-      <h1 className="page-title">Khóa học đề xuất</h1>
+        <h1 className="page-title">Khóa học đề xuất</h1>
 
-      <div className="course-grid">
-        {filtered.map((c: Course) => {
-          const isRegistered = registeredCoursesMap[c.code]
-          const isRegistering = registeringCourses.has(c.code)
-          
-          return (
+        <div className="course-grid">
+          {filtered.map((c) => (
             <article key={c.id} className="course-card">
               <div className="card-head">
                 <div className="course-code">{c.code}</div>
@@ -152,40 +153,34 @@ export default function Home() {
               </div>
               <div className="card-body">
                 <div className="tutor">Tutor: {c.tutor}</div>
-                <div className="meta">Thời gian: {c.time} </div>
-                <div className="meta">Hình thức: {c.mode}</div>
-                <div className="meta">Lớp: {c.class_code}</div>
-                <div className="meta">Nội dung: {c.content}</div>
+                <div className="meta">{c.time} • {c.mode} • {c.class_code}</div>
               </div>
               <div className="card-actions">
-                {isRegistered ? (
+                {registered[c.code] ? (
                   <button className="btn-registered" aria-label="Đã đăng ký" disabled>
                     Đã đăng ký
                   </button>
                 ) : (
-                  <button 
-                    className="btn-register" 
-                    onClick={() => handleRegister(c)}
-                    disabled={isRegistering}
-                  >
-                    {isRegistering ? 'Đang đăng ký...' : 'Đăng ký'}
+                  <button className="btn-register" onClick={() => handleRegister(c)} disabled={registeringCourses.has(c.code)}>
+                    {registeringCourses.has(c.code) ? 'Đang đăng ký...' : 'Đăng ký'}
                   </button>
                 )}
               </div>
             </article>
-          )
-        })}
-        {/* sentinel for infinite scroll */}
-        <div ref={sentinelRef} />
-      </div>
-      {/* load more */}
-      {!loading && courses.length > pageSize && (
-        <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-          <button className="btn-register" onClick={() => setPageSize((s) => s + PAGE_INCREMENT)}>
-            Tải thêm
-          </button>
+          ))}
+          {/* sentinel for infinite scroll */}
+          <div ref={sentinelRef} />
         </div>
-      )}
-    </main>
+        {/* load more */}
+        {!loading && courses.length > pageSize && (
+          <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+            <button className="btn-register" onClick={() => setPageSize((s) => s + PAGE_INCREMENT)}>
+              Tải thêm
+            </button>
+          </div>
+        )}
+      </main>
+      <Footer />
+    </>
   )
 }

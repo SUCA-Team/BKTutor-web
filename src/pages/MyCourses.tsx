@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { courseAPI } from '../services/api'
 import type { Course } from '../services/api'
+import Footer from '../components/Footer'
 import CourseDetail from '../components/CourseDetail'
 
 export default function MyCourses() {
@@ -28,6 +29,7 @@ export default function MyCourses() {
   }, [])
 
   return (
+    <>
     <main className="my-courses-page">
       <h1 className="page-title">Khóa Học Của Tôi</h1>
 
@@ -75,6 +77,8 @@ export default function MyCourses() {
         <CourseDetail course={active} onClose={() => setActive(null)} />
       )}
     </main>
+      <Footer />
+    </>
   )
 }
 

@@ -1,94 +1,43 @@
-import { useEffect, useState } from 'react'
 
-type Student = {
-  name: string
-  faculty?: string
-  email?: string
-  id?: string
-  cohort?: string
-  avatarUrl?: string
-}
-
-const FALLBACK: Student = {
-  name: 'NGUYỄN NHẬT QUANG',
-  faculty: 'Khoa Khoa học và Kỹ thuật Máy tính',
-  email: 'unknown@example.com',
-  id: '2352973',
-  cohort: '2023',
-}
+import { useAuth } from '../contexts/AuthContext'
+import Footer from '../components/Footer'
 
 export default function Info() {
-  const [student, setStudent] = useState<Student | null>(null)
-  const [loading, setLoading] = useState(false)
-
-  useEffect(() => {
-    const ac = new AbortController()
-    async function load() {
-      setLoading(true)
-      try {
-        const res = await fetch('/api/student', { signal: ac.signal })
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        const data = await res.json()
-        if (data && typeof data === 'object') setStudent(data as Student)
-        else throw new Error('Invalid data')
-      } catch (err) {
-        if (err instanceof DOMException && err.name === 'AbortError') return
-        // Fail silently; do not show errors in UI
-        console.warn('Failed to load /api/student:', err)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    load()
-    return () => ac.abort()
-  }, [])
-
-  const s = student ?? FALLBACK
+  const { user } = useAuth()
 
   return (
-    <main className="info-page">
-      <h1 className="page-title">Thông Tin Sinh Viên</h1>
-
-      {loading && <div className="loading">Đang tải thông tin...</div>}
-      {/* No error UI: fail silently and use FALLBACK data */}
-
-      <section className="info-card">
-        <div className="info-left">
-          {s.avatarUrl ? (
-            <img
-              src={s.avatarUrl}
-              alt="Avatar"
-              className="info-avatar-img"
-              onError={(e) => {
-                // hide broken image and fall back to placeholder
-                ;(e.currentTarget as HTMLImageElement).style.display = 'none'
-              }}
-            />
-          ) : (
+    <>
+      <main className="info-page">
+        <h1 className="page-title">Thông Tin Sinh Viên</h1>
+        <section className="info-card">
+          <div className="info-left">
+            {/* No avatarUrl in User type; always show placeholder */}
             <div className="info-avatar">Avatar</div>
-          )}
-        </div>
-        <div className="info-right">
-          <h2 className="info-name">{s.name}</h2>
-          <div className="info-faculty">{s.faculty}</div>
-
-          <div className="info-rows">
-            <div className="row">
-              <div className="label">E-mail</div>
-              <div className="value">{s.email}</div>
-            </div>
-            <div className="row">
-              <div className="label">MSSV</div>
-              <div className="value">{s.id}</div>
-            </div>
-            <div className="row">
-              <div className="label">Khóa</div>
-              <div className="value">{s.cohort}</div>
+          </div>
+          <div className="info-right">
+            <h2 className="info-name">{user?.full_name || 'Chưa đăng nhập'}</h2>
+            <div className="info-rows">
+              <div className="row">
+                <div className="label">Khoa</div>
+                <div className="value">Chưa cập nhật</div>
+              </div>
+              <div className="row">
+                <div className="label">E-mail</div>
+                <div className="value">{user?.email || ''}</div>
+              </div>
+              <div className="row">
+                <div className="label">MSSV</div>
+                <div className="value">{user?.id ?? ''}</div>
+              </div>
+              <div className="row">
+                <div className="label">Khóa</div>
+                <div className="value">Chưa cập nhật</div>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
-    </main>
+        </section>
+      </main>
+      <Footer />
+    </>
   )
 }

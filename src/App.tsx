@@ -6,7 +6,8 @@ import Logo from './assets/Logo.png'
 import BG from './assets/Background-pattern.png'
 import { useEffect, useState } from 'react'
 import { useAuth } from './contexts/AuthContext'
-
+import { authAPI } from './services/api'
+import type { User } from './services/api'
 function App() {
   const [now, setNow] = useState(() => new Date())
   const { isAuthenticated, user, logout, isLoading } = useAuth()
@@ -56,8 +57,8 @@ function App() {
           <div className="sidebar-header-content">
             <img src={Logo} alt="Logo" className="sidebar-logo" />
             <div className="avatar">Avatar</div>
-            <div className="user-name">NGUYỄN NHẬT QUANG</div>
-            <div className="user-id">2352973</div>
+            <div className="user-name">{user?.full_name || 'Chưa đăng nhập'}</div>
+            <div className="user-id">{user ? user.id : ''}</div>
           </div>
         </div>
 
