@@ -19,6 +19,8 @@ export interface User {
   full_name: string;
   is_active: boolean;
   created_at: string;
+  faculty?: string;
+  cohort?: string;
 }
 
 export interface Course {

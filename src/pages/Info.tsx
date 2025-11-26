@@ -19,7 +19,7 @@ export default function Info() {
             <div className="info-rows">
               <div className="row">
                 <div className="label">Khoa</div>
-                <div className="value">Chưa cập nhật</div>
+                <div className="value">{user?.faculty || 'Chưa cập nhật'}</div>
               </div>
               <div className="row">
                 <div className="label">E-mail</div>
@@ -31,7 +31,7 @@ export default function Info() {
               </div>
               <div className="row">
                 <div className="label">Khóa</div>
-                <div className="value">Chưa cập nhật</div>
+                <div className="value">{user?.cohort || 'Chưa cập nhật'}</div>
               </div>
             </div>
           </div>
