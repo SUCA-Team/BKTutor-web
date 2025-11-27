@@ -6,8 +6,8 @@ import Logo from './assets/Logo.png'
 import BG from './assets/Background-pattern.png'
 import { useEffect, useState } from 'react'
 import { useAuth } from './contexts/AuthContext'
-import { authAPI } from './services/api'
-import type { User } from './services/api'
+//import { authAPI } from './services/api'
+//import type { User } from './services/api'
 function App() {
   const [now, setNow] = useState(() => new Date())
   const { isAuthenticated, user, logout, isLoading } = useAuth()

@@ -78,10 +78,10 @@ export default function Home() {
         const myCourses = await courseAPI.getMyCourses()
         setRegisteredCourses(myCourses)
       } else {
-        alert(result.message || 'Đăng ký thất bại')
+        alert(result.message || 'Đăng ký thất bại vì trùng lịch')
       }
     } catch (err: any) {
-      const msg = err.response?.data?.detail || err.message || 'Đăng ký thất bại'
+      const msg = err.response?.data?.detail || err.message || 'Đăng ký thất bại vì trùng lịch'
       alert(msg)
     } finally {
       setRegisteringCourses(prev => {
@@ -137,11 +137,7 @@ export default function Home() {
             onChange={(e) => setQ(e.target.value)}
             className="search-input"
           />
-          <button className="search-button" aria-label="Tìm">
-            🔍
-          </button>
         </div>
-
         <h1 className="page-title">Khóa học đề xuất</h1>
 
         <div className="course-grid">
@@ -153,7 +149,7 @@ export default function Home() {
               </div>
               <div className="card-body">
                 <div className="tutor">Tutor: {c.tutor}</div>
-                <div className="meta">{c.time} • {c.mode} • {c.class_code}</div>
+                <div className="meta">Thời gian: {c.time} <br /> Hình thức: {c.mode} <br /> Lớp: {c.class_code} <br /> Nội dung: {c.content}</div>
               </div>
               <div className="card-actions">
                 {registered[c.code] ? (

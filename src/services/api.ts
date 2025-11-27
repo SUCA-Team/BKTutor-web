@@ -120,7 +120,7 @@ export const courseAPI = {
   },
 
   async unregisterFromCourse(courseCode: string): Promise<CourseRegistrationResponse> {
-    const response = await api.delete(`/courses/${courseCode}/unregister`);
+    const response = await api.delete(`/courses/${courseCode}/register`);
     return response.data;
   },
 

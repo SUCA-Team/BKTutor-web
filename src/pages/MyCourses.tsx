@@ -11,22 +11,28 @@ export default function MyCourses() {
   const [active, setActive] = useState<Course | null>(null)
 
   useEffect(() => {
-    async function loadMyCourses() {
-      try {
-        setLoading(true)
-        const myCourses = await courseAPI.getMyCourses()
-        setCourses(myCourses)
-        setError(null)
-      } catch (err: any) {
-        const msg = err.response?.data?.detail || err.message || 'Lỗi khi tải khóa học'
-        setError(msg)
-      } finally {
-        setLoading(false)
-      }
-    }
-
     loadMyCourses()
   }, [])
+
+  async function loadMyCourses() {
+    try {
+      setLoading(true)
+      const myCourses = await courseAPI.getMyCourses()
+      setCourses(myCourses)
+      setError(null)
+    } catch (err: unknown) {
+      const e = err as { response?: { data?: { detail?: string } } } | Error
+      let msg = 'Lỗi khi tải khóa học'
+      if ('response' in e && e.response?.data?.detail) {
+        msg = e.response.data.detail
+      } else if (e instanceof Error && e.message) {
+        msg = e.message
+      }
+      setError(msg)
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <>
@@ -74,7 +80,11 @@ export default function MyCourses() {
       )}
 
       {active && (
-        <CourseDetail course={active} onClose={() => setActive(null)} />
+        <CourseDetail
+          course={active}
+          onClose={() => setActive(null)}
+          onUnregisterSuccess={loadMyCourses}
+        />
       )}
     </main>
       <Footer />
