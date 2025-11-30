@@ -21,6 +21,7 @@ export interface User {
   created_at: string;
   faculty?: string;
   cohort?: string;
+  role?: string; // user role (admin, teacher, user)
 }
 
 export interface Course {
@@ -33,6 +34,16 @@ export interface Course {
   content?: string
   id: string
   created_at: string
+}
+
+export interface CourseCreateRequest {
+  code: string;
+  name: string;
+  tutor: string;
+  time: string;
+  mode: string;
+  class_code: string;
+  content?: string;
 }
 
 export interface LoginRequest {
@@ -111,6 +122,11 @@ export const courseAPI = {
 
   async getCourseDetails(courseCode: string): Promise<Course> {
     const response = await api.get(`/courses/${courseCode}`);
+    return response.data;
+  },
+
+  async createCourse(payload: CourseCreateRequest): Promise<Course> {
+    const response = await api.post('/courses', payload);
     return response.data;
   },
 

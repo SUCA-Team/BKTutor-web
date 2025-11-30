@@ -139,6 +139,67 @@ html, body, .container {
 .info-page {
 	padding: 1rem 0 2rem 0;
 }
+
+/* Create Course form styles */
+.create-course-card {
+	color: #0b1a4f; /* readable dark text */
+	background: #ffffff;
+	border-radius: 16px;
+	padding: 1.5rem;
+	max-width: 640px; /* slightly wider than form */
+	margin: 0 auto; /* center horizontally */
+	box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+.create-course-form {
+	display: grid;
+	grid-template-columns: 1fr; /* single column for vertical alignment */
+	gap: 0.75rem;
+	max-width: 640px; /* consistent width for inputs */
+}
+.create-course-form label {
+	font-weight: 550;
+	color: #0b1a4f;
+}
+.create-course-form input,
+.create-course-form textarea {
+	width: 100%;
+	box-sizing: border-box;
+	margin-top: 0.25rem;
+	padding: 0.75rem 1rem;
+	border-radius: 12px;
+	border: 1px solid #c9d2ea;
+	background: #ffffff;
+	color: #0b1a4f;
+	font-size: 1rem;
+}
+.create-course-form textarea {
+	resize: vertical;
+}
+.create-course-card h2 {
+	color: #0b1a4f;
+	font-size: 1.5rem;
+}
+.create-course-card .actions {
+	display: flex;
+	gap: 0.5rem;
+	margin-top: 0.5rem;
+}
+.create-course-card .btn-primary {
+	background: #001753;
+	color: #fff;
+	border: none;
+	border-radius: 999px;
+	padding: 0.75rem 1.25rem;
+	cursor: pointer;
+}
+.create-course-card .btn-secondary {
+	background: #e7ecfb;
+	color: #001753;
+	border: none;
+	border-radius: 999px;
+	padding: 0.75rem 1.25rem;
+	cursor: pointer;
+}
 .info-card {
 	background: #ffffff;
 	color: #001853;
@@ -273,13 +334,13 @@ html, body, .container {
 	border: none;
 	padding: 0.6rem 1.2rem;
 	border-radius: 24px;
-	font-weight: 600;
+	font-weight: 550;
 	cursor: default;
 	box-shadow: none;
 	width: 200px;
 	height: 50px;
 	font-size: 1.2rem;
-	font-weight: 600;
+	font-weight: 550;
 }
 
 /* My Courses page styles */
@@ -389,7 +450,7 @@ hr.solid {
 .toggle-switch.on .knob { transform: translateX(24px); }
 
 .support-grid { display:flex; gap: 2.5rem; align-items: center; }
-.support-link { color: #001753; text-decoration: none; font-weight: 600; }
+.support-link { color: #001753; text-decoration: none; font-weight: 550; }
 
 @media (max-width: 900px) {
 	.settings-select { min-width: 160px; }
@@ -424,6 +485,20 @@ hr.solid {
 	padding-right: 0;
   	height: 5vh;
 }
+.btn-create-course {
+	margin-top: -3.1rem;
+	background: #003EDB;
+	color: #fff;
+	border: solid 2.5px #ffffff;
+	padding: 0.6rem 1rem;
+	border-radius: 999px;
+	cursor: pointer;
+	width: 190px;
+	height: 48px;
+	font-size: 1.3rem;
+	font-weight: 550;
+}
+
 .btn-register {
 	background: rgba(0,0,0,0.3);
 	color: #fff;
@@ -434,7 +509,7 @@ hr.solid {
 	width: 200px;
 	height: 50px;
 	font-size: 1.2rem;
-	font-weight: 600;
+	font-weight: 550;
 }
 
 @media (max-width: 880px) {
@@ -484,7 +559,7 @@ hr.solid {
 .avatar {
 	width: 120px;
 	height: 120px;
-  	margin-top: 1rem;
+  	margin-top: 0rem;
 	border-radius: 50%;
 	background: #555;
 	color: #eee;
@@ -519,7 +594,7 @@ hr.solid {
 	padding: 0.8rem 1rem;
 	padding-top: 1rem;
 	border-radius: 10px;
-	font-weight: 600;
+	font-weight: 550;
   font-size: x-large;
 	margin-bottom: 0.6rem;
   height: 30px;
