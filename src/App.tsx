@@ -10,7 +10,7 @@ import { useAuth } from './contexts/AuthContext'
 //import type { User } from './services/api'
 function App() {
   const [now, setNow] = useState(() => new Date())
-  const { isAuthenticated, user, logout, isLoading } = useAuth()
+  const { isAuthenticated, user, isLoading } = useAuth()
 
   useEffect(() => {
     const t = setInterval(() => setNow(new Date()), 1000)

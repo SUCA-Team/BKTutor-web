@@ -72,7 +72,6 @@ const Login: React.FC = () => {
 
         <div className="demo-credentials">
           <h3>Demo Accounts:</h3>
-          <p><strong>Admin:</strong> admin / admin123</p>
           <p><strong>Teacher:</strong> teacher / teacher123</p>
           <p><strong>Student:</strong> john / password123</p>
         </div>
